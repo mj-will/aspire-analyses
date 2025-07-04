@@ -1,0 +1,24 @@
+name: poppy-env
+channels:
+  - conda-forge
+dependencies:
+  - python=3.11
+  - numpy
+  - scipy
+  - array-api-compat
+  - bilby>=2.5.0
+  - bilby_pipe>=1.6.0
+  - dynesty
+  - emcee
+  - pesummary
+  - zuko
+  - natsort
+  - pytest
+  - pytest-requires
+  - pytorch-cpu
+  - wrapt
+  - jax
+  - pip
+  - pip:
+    - minipcn
+    - flowjax
