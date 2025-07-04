@@ -27,7 +27,6 @@ from bilby.gw.source import (
     lal_binary_black_hole,
     lal_binary_neutron_star,
     gwsignal_binary_black_hole,
-    gwsignal_eccentric_binary_black_hole,
 )
 from bilby.gw.waveform_generator import WaveformGenerator
 from bilby_pipe.utils import convert_string_to_dict
@@ -64,10 +63,10 @@ def create_parser():
         help="File to load injections from.",
     )
     parser.add_argument(
-        "--psd-dict",
-        type=str,
-        default="default",
-        help="PSD dictionary in bilby_pipe format. Default will use Bilby built in defaults.",
+        "--psd-path",
+        type=Path,
+        default="psds",
+        help="Path to the PSD files",
     )
     parser.add_argument(
         "--calibration-dict",
@@ -141,8 +140,7 @@ def td_waveform(params, args):
         conversion = convert_to_lal_binary_black_hole_parameters
         fdsm = gwsignal_binary_black_hole
     elif approx == "SEOBNRv5EHM":
-        conversion = convert_to_lal_binary_black_hole_parameters
-        fdsm = gwsignal_eccentric_binary_black_hole
+        raise RuntimeError("EHM not yet supported")
     else:
         logger.warning("Assuming a BNS waveform")
         conversion = convert_to_lal_binary_neutron_star_parameters
@@ -206,9 +204,7 @@ def load_injections(args):
 
 def do_injection(ifos, injection, channels, strain, args):
     strain_with_inj = strain.copy()
-    print(injection)
     parameters = dict(injection)
-
     if args.aligned_spins:
         parameters = precessing_to_aligned(parameters)
 
@@ -258,11 +254,11 @@ def main():
 
     bilby.core.utils.log.setup_logger(log_level=args.log_level)
 
-    if args.psd_dict == "default":
-        psd_dict = dict()
-    else:
-        # manually add braces because bash can't handle it
-        psd_dict = convert_string_to_dict("{" + args.psd_dict + "}")
+    asd_files = {
+        "H1": args.psd_path / "aligo_O3actual_H1.txt",
+        "L1": args.psd_path / "aligo_O3actual_L1.txt",
+        "V1": args.psd_path / "avirgo_O3actual.txt",
+    }
 
     cal_priors = PriorDict()
     if args.calibration_dict == "default":
@@ -281,9 +277,12 @@ def main():
         ifos = InterferometerList(args.interferometers)
         for ifo in ifos:
             ifo.minimum_frequency = 10
-            if ifo.name in psd_dict:
+            if ifo.name in asd_files:
+                logger.info(f"Loading PSD for {ifo.name} from {asd_files[ifo.name]}")
                 method = PowerSpectralDensity.from_amplitude_spectral_density_file
-                ifo.power_spectral_density = method(psd_dict[ifo.name])
+                ifo.power_spectral_density = method(asd_files[ifo.name])
+            else:
+                raise ValueError(f"IFO {ifo.name} missing from PSDs")
             if not args.exclude_calibration and ifo.name in cal_dict:
                 ifo.calibration_model = CubicSpline(
                     prefix=f"recalib_{ifo.name}_",
@@ -301,7 +300,7 @@ def main():
                     )
                 )
             else:
-                logger.debug(f"Skipping calibration for {ifo}")
+                logger.info(f"Skipping calibration for {ifo}")
         channels = {ifo.name: ":".join([ifo.name, base_channel_name]) for ifo in ifos}
         strain = dict()
 
