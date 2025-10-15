@@ -1,6 +1,6 @@
-# poppy-analyses
+# aspire-analyses
 
-Analyses performed with poppy.
+Analyses performed with aspire.
 
 
 ## Acknowledgements

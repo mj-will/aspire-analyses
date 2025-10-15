@@ -1,4 +1,4 @@
-name: poppy-env
+name: aspire
 channels:
   - conda-forge
 dependencies:
@@ -6,7 +6,7 @@ dependencies:
   - numpy
   - scipy
   - array-api-compat
-  - bilby>=2.5.0
+  - bilby>=2.6.0
   - bilby_pipe>=1.6.0
   - dynesty
   - emcee
@@ -18,7 +18,13 @@ dependencies:
   - pytorch-cpu
   - wrapt
   - jax
+  - optax
+  - jaxlib
+  - chex
+  - equinox
+  - toolz
+  - jaxtyping
+  - wadler-lindig
   - pip
   - pip:
-    - minipcn
     - flowjax
