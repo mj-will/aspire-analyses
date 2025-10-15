@@ -1,0 +1,3 @@
+# first_paper results
+FIRST_PAPER_LOCAL_RESULTS=results_first_paper_local.yaml
+FIRST_PAPER_DATA_RELEASE_DIR=first_paper_data_release
