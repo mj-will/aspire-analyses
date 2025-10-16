@@ -1,3 +1,10 @@
+"""Generate injection parameters from a prior file.
+
+Computes the optimal SNR in each detector and the network SNR for each injection.
+
+Based on code originally written by Colm Talbot.
+"""
+
 import argparse
 from copy import deepcopy
 from pathlib import Path
@@ -84,7 +91,7 @@ def main(args):
     elif args.waveform == "SEOBNRv5EHM":
         source_function = bilby.gw.source.gwsignal_eccentric_binary_black_hole
     elif args.waveform == "TaylorF2Ecc":
-        from poppy_analysis_tools.gw.source import (
+        from aspire_analysis_tools.gw.source import (
             eccentric_binary_black_hole_aligned_spins,
         )
 

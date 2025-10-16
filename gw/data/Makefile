@@ -1,54 +1,42 @@
+include config.mk
 
-
-injection_parameters/GW150914_parameters.hdf5:
-	python generate_injection_parameter.py \
+$(INJECTION_PARAMS_PATH)/GW150914_parameters.hdf5:
+	python generate_injection_parameters.py \
 		--n-samples 1 \
 		--prior-file GW150914-injection.prior \
-		--injection-file injection_parameters/GW150914_parameters.hdf5 \
+		--injection-file $(INJECTION_PARAMS_PATH)/GW150914_parameters.hdf5 \
 		--waveform IMRPhenomXPHM
 
-injection_parameters/eccentric_injection_q3_parameters.hdf5:
-	python generate_injection_parameter.py \
+$(INJECTION_PARAMS_PATH)/HM_injection_q4_parameters.hdf5:
+	python generate_injection_parameters.py \
 		--n-samples 1 \
-		--prior-file q3-eccentric-injection.prior \
-		--injection-file injection_parameters/eccentric_injection_q3_parameters.hdf5 \
-		--reference-frequency 20 \
-		--minimum-frequency 20 \
-		--waveform SEOBNRv5EHM
+		--prior-file q4-HM-injection.prior \
+		--injection-file $(INJECTION_PARAMS_PATH)/HM_injection_q4_parameters.hdf5 \
+		--waveform IMRPhenomXPHM
 
 
-GW150914_XPHM_data: injection_parameters/GW150914_parameters.hdf5
+GW150914_XPHM_data: $(INJECTION_PARAMS_PATH)/GW150914_parameters.hdf5
 	python generate_data.py \
 		--start-time 1364342474 \
 		--frame-duration 4096 \
 		--inject \
 		--injection-file $< \
 		--waveform-approximant IMRPhenomXPHM \
-		--channel-name PoppyMockData \
+		--channel-name MockData \
 		--n-injections 1 \
-		--outdir frame_files/GW150914_XPHM_data
+		--outdir $(FRAME_FILES_PATH)/GW150914_XPHM_data
 
-GW150914_XHM_data: injection_parameters/GW150914_parameters.hdf5
+
+injection_q4_HM_IMRPhenomXPHM_data: $(INJECTION_PARAMS_PATH)/HM_injection_q4_parameters.hdf5
 	python generate_data.py \
 		--start-time 1364342474 \
 		--frame-duration 4096 \
 		--inject \
 		--injection-file $< \
-		--waveform-approximant IMRPhenomXHM \
-		--channel-name PoppyMockData \
+		--waveform-approximant IMRPhenomXPHM \
+		--channel-name MockData \
 		--n-injections 1 \
-		--outdir frame_files/GW150914_XHM_data \
-		--aligned-spins
+		--outdir $(FRAME_FILES_PATH)/HM_injection_q4_IMRPhenomXPHM_data
 
-injection_q3_SEOBNRv5EHM_data: injection_parameters/eccentric_injection_q3_parameters.hdf5
-	python generate_data.py \
-		--start-time 1364342474 \
-		--frame-duration 4096 \
-		--inject \
-		--injection-file $< \
-		--waveform-approximant SEOBNRv5EHM \
-		--channel-name PoppyMockData \
-		--n-injections 1 \
-		--reference-frequency 20 \
-		--minimum-frequency 20 \
-		--outdir frame_files/eccentric_injection_q3_SEOBNRv5EHM_data
+.PHONY: first_paper_data
+first_paper_data: GW150914_XPHM_data HM_injection_q4_IMRPhenomXPHM_data
