@@ -25,6 +25,11 @@ dependencies:
   - toolz
   - jaxtyping
   - wadler-lindig
+  - minipcn
   - pip
   - pip:
     - flowjax
+    - gwflow
+    - aspire
+    - aspire-bilby
+    - aspire-gw
