@@ -2,6 +2,8 @@
 
 Accelerated Sequential Posterior Inference via Reuse (aspire) analyses and supporting tools for gravitational-wave inference.
 
+See [the documentation](http://aspire-analyses.michaeljwilliams.me/) for more details.
+
 ## Overview
 
 - Reproducible workflows, notebooks, and configuration files used in the *Accelerated Sequential Posterior Inference via Reuse for Gravitational-Wave Analyses* study.
@@ -13,7 +15,7 @@ Accelerated Sequential Posterior Inference via Reuse (aspire) analyses and suppo
 - `gw/`: `bilby` and `aspire` configuration files, injection studies, and plotting assets for the paper.
 - `docs/`: Jupyter Book; `make -C docs build` regenerates the site and syncs notebooks.
 - `toy_examples/`: Toy examples with analytic/toy likelihoods.
-- `data_releases/`: Makefiles and support scripts for packaging published artefacts.
+- `data_releases/`: Makefiles and support scripts for packaging published results.
 
 ## Getting started
 - Requires Python 3.11+, `conda` (or `mamba`), and the dependencies listed in `environment.yml`.
