@@ -22,7 +22,6 @@ sync_first_paper_plots:
 	mkdir -p "$(FIRST_PAPER_DST)"
 	rm -f "$(FIRST_PAPER_DST)"/*.ipynb
 	cp "$(FIRST_PAPER_SRC)/plots.style" "$(FIRST_PAPER_DST)/"
-	cp "$(FIRST_PAPER_SRC)/config.mk" "$(FIRST_PAPER_DST)/"
 	for nb in "$(FIRST_PAPER_SRC)"/*.ipynb; do \
 		[ -e "$$nb" ] || continue; \
 		cp "$$nb" "$(FIRST_PAPER_DST)/"; \
