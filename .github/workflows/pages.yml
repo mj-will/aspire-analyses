@@ -65,7 +65,7 @@ jobs:
       - name: Download data release from Zenodo
         run: |
           conda activate aspire
-          cd data_release
+          cd data_releases
         # Skip for testing
         #   make download_core
         shell: bash -l {0}
