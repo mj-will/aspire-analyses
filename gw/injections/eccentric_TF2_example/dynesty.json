@@ -1,0 +1,6 @@
+{
+    "sampler": "dynesty",
+    "nlive": 1000,
+    "naccept": 60,
+    "sample": "acceptance-walk"
+}

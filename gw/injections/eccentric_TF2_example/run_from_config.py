@@ -15,6 +15,7 @@ performs the following steps:
    from the aligned spin model.
 """
 
+import argparse
 import copy
 import bilby
 import numpy as np
@@ -24,6 +25,47 @@ import matplotlib.pyplot as plt
 import os
 import sys
 import json
+
+
+def get_parser() -> argparse.ArgumentParser:
+    parser = argparse.ArgumentParser(
+        description="Run bilby eccentric binary black hole example from config file"
+    )
+    parser.add_argument(
+        "--sampler-config",
+        type=str,
+        help="Path to the configuration file.",
+    )
+    parser.add_argument(
+        "--n-pool",
+        type=int,
+        default=1,
+        help="Number of parallel processes to use.",
+    )
+    parser.add_argument(
+        "--outdir",
+        type=Path,
+        default="outdir",
+        help="Output directory for results.",
+    )
+    parser.add_argument(
+        "--eccentricity",
+        action="store_true",
+        help="Include eccentricity in the analysis.",
+    )
+    parser.add_argument(
+        "--label",
+        type=str,
+        default="eccentric_injection",
+        help="Label for the analysis.",
+    )
+    parser.add_argument(
+        "--seed",
+        type=int,
+        default=1234,
+        help="Random seed for reproducibility.",
+    )
+    return parser
 
 
 def lal_eccentric_binary_black_hole(
@@ -121,17 +163,16 @@ def calculate_fisco_from_solar_masses(
     return fISCO_orbital
 
 
-def main(n_pool=1):
+def main(n_pool=1, eccentricity=True, outdir=Path("outdir"), label=None, seed=None, **kwargs):
     # Sets seed of bilby's generator "rng" to "123" to ensure reproducibility
-    seed(1234)
+    bilby.core.utils.random.seed(seed)
     # Set OMP_NUM_THREADS=1
     os.environ["OMP_NUM_THREADS"] = "1"
 
     duration = 16
     sampling_frequency = 512
 
-    outdir = Path("outdir_800Mp")
-    label = "eccentric_injection"
+    outdir = Path(outdir)
     bilby.core.utils.setup_logger(outdir=outdir, label=label)
 
     injection_parameters = dict(
@@ -272,45 +313,31 @@ def main(n_pool=1):
         minimum=-0.99, maximum=0.99, name="chi_2", latex_label="$\chi_2$"
     )
 
-    aligned_priors = copy.deepcopy(priors)
-    aligned_priors.pop("eccentricity")
-    aspire_priors = copy.deepcopy(priors)
-    aspire_waveform_generator = copy.deepcopy(waveform_generator)
-
-    likelihood = bilby.gw.likelihood.GravitationalWaveTransient(
-        interferometers=ifos,
-        waveform_generator=waveform_generator,
-        priors=priors,
-        time_marginalization=False,
-        distance_marginalization=True,
-        phase_marginalization=True,
-    )
-
-    aligned_likelihood = bilby.gw.likelihood.GravitationalWaveTransient(
-        interferometers=ifos,
-        waveform_generator=aligned_waveform_generator,
-        priors=aligned_priors,
-        time_marginalization=False,
-        distance_marginalization=True,
-        phase_marginalization=True,
-    )
-
-    aspire_likelihood = bilby.gw.likelihood.GravitationalWaveTransient(
-        interferometers=ifos,
-        waveform_generator=aspire_waveform_generator,
-        priors=aspire_priors,
-        time_marginalization=False,
-        distance_marginalization=True,
-        phase_marginalization=True,
-    )
+    if eccentricity:
+        likelihood = bilby.gw.likelihood.GravitationalWaveTransient(
+            interferometers=ifos,
+            waveform_generator=waveform_generator,
+            priors=priors,
+            time_marginalization=False,
+            distance_marginalization=True,
+            phase_marginalization=True,
+        )
+    else:
+        priors.pop("eccentricity")
+        likelihood = bilby.gw.likelihood.GravitationalWaveTransient(
+            interferometers=ifos,
+            waveform_generator=aligned_waveform_generator,
+            priors=priors,
+            time_marginalization=False,
+            distance_marginalization=True,
+            phase_marginalization=True,
+        )
+        waveform_generator = aligned_waveform_generator
+        injection_parameters = None
 
     result = bilby.run_sampler(
         likelihood=likelihood,
         priors=priors,
-        sampler="dynesty",
-        nlive=1000,
-        naccept=60,
-        sample="acceptance-walk",
         injection_parameters=injection_parameters,
         outdir=outdir,
         label=label,
@@ -318,68 +345,31 @@ def main(n_pool=1):
         n_pool=n_pool,
         conversion_function=bilby.gw.conversion.generate_all_bbh_parameters,
         save="hdf5",
+        seed=args.seed,
+        **kwargs,
     )
 
     result.plot_corner()
 
-    result_aligned = bilby.run_sampler(
-        likelihood=aligned_likelihood,
-        priors=aligned_priors,
-        sampler="dynesty",
-        nlive=1000,
-        naccept=60,
-        sample="acceptance-walk",
-        injection_parameters=injection_parameters,
-        outdir=outdir,
-        label=label + "_aligned",
-        result_class=bilby.gw.result.CBCResult,
-        waveform_generator=aligned_waveform_generator,
-        n_pool=n_pool,
-        conversion_function=bilby.gw.conversion.generate_all_bbh_parameters,
-        save="hdf5",
-    )
-
-    # And finally we make some plots of the output posteriors.
-    result_aligned.plot_corner()
-
-    # Run aspire
-
-    result_aspire = bilby.run_sampler(
-        likelihood=aspire_likelihood,
-        priors=aspire_priors,
-        sampler="aspire",
-        injection_parameters=injection_parameters,
-        conversion_function=bilby.gw.conversion.generate_all_bbh_parameters,
-        outdir=str(outdir),
-        label=label + "_aspire_from_aligned_nsteps",
-        result_class=bilby.gw.result.CBCResult,
-        save="hdf5",
-        n_pool=n_pool,
-        initial_result_file=str(outdir / f"{label}_aligned_result.hdf5"),
-        sample_from_prior=[
-            "chirp_mass",
-            "mass_ratio",
-            "chi_1",
-            "chi_2",
-            "geocent_time",
-        ],
-        n_samples=1000,
-        plot=True,
-        n_final_samples=10_000,
-        hidden_features=[16, 16],
-        fit_kwargs=dict(n_epochs=100, lr_annealing=True, clip_grad=5.0),
-        sample_kwargs=dict(
-            sampler="minipcn_smc",
-            adaptive=True,
-            target_efficiency=(0.5, 0.8),
-            target_efficiency_rate=0.5,
-            sampler_kwargs=dict(n_steps=500),
-        ),
-    )
-
-    result_aspire.plot_corner()
-
-
 if __name__ == "__main__":
-    n_pool = int(sys.argv[1]) if len(sys.argv) > 1 else 1
-    main(n_pool=n_pool)
+    args = get_parser().parse_args()
+
+    # Copy config file to outdir
+    outdir = Path(args.outdir)
+    outdir.mkdir(parents=True, exist_ok=True)
+    if args.sampler_config is not None:
+        os.system(f"cp {args.sampler_config} {outdir}/sampler_config_{args.label}.json")
+
+    # Load json config file and pass to main
+    with open(args.sampler_config, "r") as f:
+        config = json.load(f)
+    print(f"Loaded config: {config}")
+
+    main(
+        n_pool=args.n_pool,
+        eccentricity=args.eccentricity,
+        outdir=args.outdir,
+        label=args.label,
+        seed=args.seed,
+        **config
+    )

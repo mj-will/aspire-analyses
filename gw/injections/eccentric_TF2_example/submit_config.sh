@@ -23,4 +23,8 @@ export MKL_NUM_THREADS=1
 # Print the python path
 echo "Python path: $(which python)"
 # Run the Python script with the number of tasks per node
-${ENV}/bin/python run.py ${SLURM_NTASKS_PER_NODE}
+# ${ENV}/bin/python run_from_config.py --n-pool ${SLURM_NTASKS_PER_NODE} --sampler-config dynesty.json --seed 1234 --outdir outdir_from_config --label dynesty_aligned
+
+# ${ENV}/bin/python run_from_config.py --n-pool ${SLURM_NTASKS_PER_NODE} --sampler-config dynesty.json --seed 1234 --outdir outdir_from_config --label dynesty_eccentric --eccentric
+
+${ENV}/bin/python run_from_config.py --n-pool ${SLURM_NTASKS_PER_NODE} --sampler-config aspire.json --seed 1234 --outdir outdir_from_config --label aspire_from_aligned_Exp5 --eccentric

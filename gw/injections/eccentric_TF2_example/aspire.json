@@ -1,0 +1,29 @@
+{
+    "sampler": "aspire",
+    "initial_result_file": "outdir_from_config/dynesty_aligned_result.hdf5",
+    "sample_from_prior": [
+        "chirp_mass",
+        "mass_ratio",
+        "chi_1",
+        "chi_2",
+        "geocent_time"
+    ],
+    "n_samples": 1000,
+    "plot": true,
+    "n_final_samples": 10000,
+    "hidden_features": [16, 16],
+    "fit_kwargs": {
+        "n_epochs": 100,
+        "lr_annealing": true,
+        "clip_grad": 5.0
+    },
+    "sample_kwargs": {
+        "sampler": "smc",
+        "adaptive": true,
+        "target_efficiency": 0.8,
+        "target_efficiency_rate": 0.5,
+        "sampler_kwargs": {
+            "n_steps": 300
+        }
+    }
+}
