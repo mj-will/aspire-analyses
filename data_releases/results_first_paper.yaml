@@ -1,32 +1,32 @@
 GW150914:
   IMRPhenomXO4a:
-    aspire: first_paper_data_release/core_results/GW150914_IMRPhenomXO4a_aspire_result.hdf5
-    dynesty: first_paper_data_release/core_results/GW150914_IMRPhenomXO4a_dynesty_result.hdf5
+    aspire: first_paper_data_release/core_results/single_event_analyses/GW150914_IMRPhenomXO4a_aspire_result.hdf5
+    dynesty: first_paper_data_release/core_results/single_event_analyses/GW150914_IMRPhenomXO4a_dynesty_result.hdf5
   IMRPhenomXPHM:
-    dynesty: first_paper_data_release/core_results/GW150914_IMRPhenomXPHM_dynesty_result.hdf5
+    dynesty: first_paper_data_release/core_results/single_event_analyses/GW150914_IMRPhenomXPHM_dynesty_result.hdf5
 GW150914-like:
   IMRPhenomD:
-    dynesty: first_paper_data_release/core_results/GW150914_like_IMRPhenomD_dynesty_result.hdf5
+    dynesty: first_paper_data_release/core_results/single_event_analyses/GW150914_like_IMRPhenomD_dynesty_result.hdf5
   IMRPhenomPv2:
-    aspire from IMRPhenomD: first_paper_data_release/core_results/GW150914_like_IMRPhenomPv2_aspire
+    aspire from IMRPhenomD: first_paper_data_release/core_results/single_event_analyses/GW150914_like_IMRPhenomPv2_aspire
       from IMRPhenomD_result.hdf5
-    dynesty: first_paper_data_release/core_results/GW150914_like_IMRPhenomPv2_dynesty_result.hdf5
+    dynesty: first_paper_data_release/core_results/single_event_analyses/GW150914_like_IMRPhenomPv2_dynesty_result.hdf5
   IMRPhenomXO4a:
-    aspire from IMRPhenomXPHM: first_paper_data_release/core_results/GW150914_like_IMRPhenomXO4a_aspire
+    aspire from IMRPhenomXPHM: first_paper_data_release/core_results/single_event_analyses/GW150914_like_IMRPhenomXO4a_aspire
       from IMRPhenomXPHM_result.hdf5
-    dynesty: first_paper_data_release/core_results/GW150914_like_IMRPhenomXO4a_dynesty_result.hdf5
+    dynesty: first_paper_data_release/core_results/single_event_analyses/GW150914_like_IMRPhenomXO4a_dynesty_result.hdf5
   IMRPhenomXPHM:
-    dynesty: first_paper_data_release/core_results/GW150914_like_IMRPhenomXPHM_dynesty_result.hdf5
+    dynesty: first_paper_data_release/core_results/single_event_analyses/GW150914_like_IMRPhenomXPHM_dynesty_result.hdf5
 eccentric:
   TaylorF2:
-    dynesty: first_paper_data_release/core_results/eccentric_TaylorF2_dynesty_result.hdf5
+    dynesty: first_paper_data_release/core_results/single_event_analyses/eccentric_TaylorF2_dynesty_result.hdf5
   TaylorF2Ecc:
-    aspire: first_paper_data_release/core_results/eccentric_TaylorF2Ecc_aspire_result.hdf5
-    dynesty: first_paper_data_release/core_results/eccentric_TaylorF2Ecc_dynesty_result.hdf5
+    aspire: first_paper_data_release/core_results/single_event_analyses/eccentric_TaylorF2Ecc_aspire_result.hdf5
+    dynesty: first_paper_data_release/core_results/single_event_analyses/eccentric_TaylorF2Ecc_dynesty_result.hdf5
 q4:
   IMRPhenomXO4a:
-    aspire from IMRPhenomXPHM: first_paper_data_release/core_results/q4_IMRPhenomXO4a_aspire
+    aspire from IMRPhenomXPHM: first_paper_data_release/core_results/single_event_analyses/q4_IMRPhenomXO4a_aspire
       from IMRPhenomXPHM_result.hdf5
-    dynesty: first_paper_data_release/core_results/q4_IMRPhenomXO4a_dynesty_result.hdf5
+    dynesty: first_paper_data_release/core_results/single_event_analyses/q4_IMRPhenomXO4a_dynesty_result.hdf5
   IMRPhenomXPHM:
-    dynesty: first_paper_data_release/core_results/q4_IMRPhenomXPHM_dynesty_result.hdf5
+    dynesty: first_paper_data_release/core_results/single_event_analyses/q4_IMRPhenomXPHM_dynesty_result.hdf5

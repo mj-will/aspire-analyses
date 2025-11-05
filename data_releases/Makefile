@@ -6,6 +6,7 @@ GWDATA_DIR := $(abspath $(MAKEFILE_DIR)/../gw/data)
 GWDATA_config := $(GWDATA_DIR)/config.mk
 PP_TEST_DIR := $(abspath $(MAKEFILE_DIR)/../gw/pp_tests)
 FIRST_PAPER_PP_TEST_DIR := $(PP_TEST_DIR)/$(FIRST_PAPER_PP_TEST_OUTDIR)
+PP_TEST_CACHE_DIR := $(abspath $(MAKEFILE_DIR)/../gw/plots/first_paper/pp_test_data)
 
 ZIP_COMMAND := zip -r
 
@@ -25,7 +26,11 @@ first_paper_data_release_core_results: $(FIRST_PAPER_DATA_RELEASE_DIR)/core_resu
 $(FIRST_PAPER_DATA_RELEASE_DIR)/core_results:
 	@echo "Making data release for first paper core results"
 	mkdir -p $@
-	python fetch_results_from_yaml.py $(FIRST_PAPER_LOCAL_RESULTS) --outdir $@ --output-yaml results_first_paper.yaml --overwrite --verbose
+	@echo "Linking P-P test results from $(PP_TEST_CACHE_DIR)"
+	rm -f $@/pp_test_results
+	ln -s $(PP_TEST_CACHE_DIR) $@/pp_test_results
+	rm -rf $@/single_event_analyses
+	python fetch_results_from_yaml.py $(FIRST_PAPER_LOCAL_RESULTS) --outdir $@/single_event_analyses/ --output-yaml results_first_paper.yaml --overwrite --verbose
 
 # Results data release
 .PHONY: first_paper_data_release_data
@@ -79,9 +84,15 @@ first_paper_data_release_zip: first_paper_data_release_core_results_zip first_pa
 # Safely extract results. Fails if files already exist.
 extract_results:
 	@echo "Extracting first paper data release zip"
-	unzip -n $(FIRST_PAPER_DATA_RELEASE_DIR)/core_results.zip -d $(FIRST_PAPER_DATA_RELEASE_DIR)/core_results
-	unzip -n $(FIRST_PAPER_DATA_RELEASE_DIR)/data.zip -d $(FIRST_PAPER_DATA_RELEASE_DIR)/data
-	unzip -n $(FIRST_PAPER_DATA_RELEASE_DIR)/additional_results.zip -d $(FIRST_PAPER_DATA_RELEASE_DIR)/additional_results
+	unzip -n $(FIRST_PAPER_DATA_RELEASE_DIR)/core_results.zip -d $(FIRST_PAPER_DATA_RELEASE_DIR)
+	unzip -n $(FIRST_PAPER_DATA_RELEASE_DIR)/data.zip -d $(FIRST_PAPER_DATA_RELEASE_DIR)
+	unzip -n $(FIRST_PAPER_DATA_RELEASE_DIR)/additional_results.zip -d $(FIRST_PAPER_DATA_RELEASE_DIR)
+
+
+.PHONY: symlink_to_analysis_dirs
+symlink_to_analysis_dirs:
+	@echo "Creating symlinks to data release directories in analysis directories"
+	ln -s $(abspath $(FIRST_PAPER_DATA_RELEASE_DIR)/core_results/
 
 .PHONY: clean
 clean:
