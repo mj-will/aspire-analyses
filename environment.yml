@@ -32,6 +32,6 @@ dependencies:
   - pip:
     - flowjax
     - gwflow
-    - aspire
+    - aspire-inference
     - aspire-bilby
     - aspire-gw
