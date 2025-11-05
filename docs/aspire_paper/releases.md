@@ -2,7 +2,7 @@
 
 The paper is accompanied by three data releases:
 
-- Code release (DOI):
+- Code release (DOI): https://doi.org/10.5281/zenodo.17536447
 - Results release (DOI): https://doi.org/10.5281/zenodo.17514969
 
 Each of these can be downloaded from the corresponding DOI or using

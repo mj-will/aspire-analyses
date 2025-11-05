@@ -55,7 +55,7 @@ aat_plot_comparison \
 ## Citation
 
 - Cite aspire via [Zenodo DOI 10.5281/zenodo.15658747](https://doi.org/10.5281/zenodo.15658747).
-- DOIs for code and result releases are listed in the documentation.
+- DOIs for code and result releases listed in [the documentation](http://aspire-analyses.michaeljwilliams.me/).
 
 ## Acknowledgements
 
