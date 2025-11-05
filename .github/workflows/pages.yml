@@ -6,7 +6,52 @@ on:
       - main
 
 jobs:
+  detect-changes:
+    runs-on: ubuntu-latest
+    outputs:
+      container: ${{ steps.filter.outputs.container }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - id: filter
+        uses: dorny/paths-filter@v2
+        with:
+          filters: |
+            container:
+              - '.github/workflows/pages.yml'
+              - '.github/docker/**'
+              - 'environment.yml'
+              - 'pyproject.toml'
+              - 'src/**'
+
+  build-container:
+    runs-on: ubuntu-latest
+    needs: detect-changes
+    if: needs.detect-changes.outputs.container == 'true'
+    permissions:
+      packages: write
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Build and push docs container
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: .github/docker/Dockerfile
+          push: true
+          tags: ghcr.io/${{ github.repository_owner }}/docs-container:latest
+
   build:
+    needs:
+      - detect-changes
+      - build-container
     runs-on: ubuntu-latest
     container:
       image: ghcr.io/${{ github.repository_owner }}/docs-container:latest
