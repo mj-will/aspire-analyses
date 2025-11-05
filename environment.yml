@@ -27,6 +27,7 @@ dependencies:
   - wadler-lindig
   - minipcn
   - zenodo_get
+  - jupyter-book<2.0
   - pip
   - pip:
     - flowjax
