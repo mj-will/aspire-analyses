@@ -1,0 +1,14 @@
+format: jb-book
+root: intro
+options:
+  numbered: 2
+chapters:
+  - file: aspire_paper/intro
+    sections:
+      - file: aspire_paper/releases
+      - file: aspire_paper/plots.ipynb
+      - file: aspire_paper/stats.ipynb
+      - file: aspire_paper/analyses
+  - file: toy_examples/intro
+    sections:
+      - file: toy_examples/biased_initial_samples.ipynb
