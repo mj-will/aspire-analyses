@@ -1,0 +1,18 @@
+{
+  "title": "Accelerated Sequential Posterior Inference via Reuse for Gravitational-Wave Analyses - Code Release",
+  "creators": [
+    {
+        "name": "Williams, Michael J.",
+        "affiliation": "University of Portsmouth",
+        "orcid": "0000-0003-2198-2974"
+    }
+  ],
+  "keywords": ["gravitational waves", "Bayesian inference", "sequential Monte Carlo"],
+  "related_identifiers": [
+    {
+      "identifier": "https://doi.org/10.5281/zenodo.17514968",
+      "relation": "isSupplementedBy",
+      "resource_type": "dataset"
+    }
+  ]
+}
