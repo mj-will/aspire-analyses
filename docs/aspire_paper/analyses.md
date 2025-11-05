@@ -1,7 +1,17 @@
 # Running analyses
 
 Code and ini files to produce the analyses in the paper can be found in the accompanying [GitHub repository]().
-For the specific versions used in this paper, checkout [*version*]() or download it from this [DOI]().
+For the specific versions used in this paper, checkout v1.0 or download it from this [DOI]().
+
+## Environment
+
+The environment for running analyses is defined in `environment.yml`
+
+```bash
+conda env create -f environment.yml
+conda activate aspire
+pip install -e .
+```
 
 ## Injection studies
 

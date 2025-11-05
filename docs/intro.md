@@ -18,6 +18,10 @@ data release for the first paper describing aspire.
 - [Toy examples](toy_examples/intro.md)
 
 
+## Environments
+
+See [environment](environment) for more details.
+
 ## Packages
 
 - [aspire](https://github.com/mj-will/aspire)

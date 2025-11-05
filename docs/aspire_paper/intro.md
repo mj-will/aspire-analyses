@@ -4,7 +4,15 @@ Data release for 'Accelerated Sequential Posterior Inference via Reuse for Gravi
 
 The pages linked below describe how to reproduce the analyses and plots from the paper.
 
-**Contents**
+For details on how to create a suitable environment, see [environment](../environment.md)
+
+## Contents
 
 ```{tableofcontents}
 ```
+
+
+## Citation
+
+If you use `aspire` in your own work, please cite the [DOI](https://doi.org/10.5281/zenodo.15658747).
+If you use any of the code and/or data from this page, please cite its [DOI]().
