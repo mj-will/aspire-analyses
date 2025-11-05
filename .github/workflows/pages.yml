@@ -46,7 +46,7 @@ jobs:
           context: .
           file: .github/docker/Dockerfile
           push: true
-          tags: ghcr.io/${{ github.repository_owner }}/docs-container:latest
+          tags: ghcr.io/${{ github.repository }}/aspire-analyses-docs-container:latest
 
   build:
     needs:
@@ -54,7 +54,7 @@ jobs:
       - build-container
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/${{ github.repository_owner }}/docs-container:latest
+      image: ghcr.io/${{ github.repository }}/aspire-analyses-docs-container:latest
       credentials:
         username: ${{ github.actor }}
         password: ${{ secrets.GITHUB_TOKEN }}
