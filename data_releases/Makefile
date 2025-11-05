@@ -79,9 +79,9 @@ first_paper_data_release_zip: first_paper_data_release_core_results_zip first_pa
 # Safely extract results. Fails if files already exist.
 extract_results:
 	@echo "Extracting first paper data release zip"
-	unzip -n $(FIRST_PAPER_DATA_RELEASE_DIR)/core_results.zip -d $(FIRST_PAPER_DATA_RELEASE_DIR)
-	unzip -n $(FIRST_PAPER_DATA_RELEASE_DIR)/data.zip -d $(FIRST_PAPER_DATA_RELEASE_DIR)
-	unzip -n $(FIRST_PAPER_DATA_RELEASE_DIR)/additional_results.zip -d $(FIRST_PAPER_DATA_RELEASE_DIR)
+	unzip -n $(FIRST_PAPER_DATA_RELEASE_DIR)/core_results.zip -d $(FIRST_PAPER_DATA_RELEASE_DIR)/core_results
+	unzip -n $(FIRST_PAPER_DATA_RELEASE_DIR)/data.zip -d $(FIRST_PAPER_DATA_RELEASE_DIR)/data
+	unzip -n $(FIRST_PAPER_DATA_RELEASE_DIR)/additional_results.zip -d $(FIRST_PAPER_DATA_RELEASE_DIR)/additional_results
 
 .PHONY: clean
 clean:
