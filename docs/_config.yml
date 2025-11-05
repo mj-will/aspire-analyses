@@ -15,3 +15,7 @@ html:
   show_sidebar: true
   sidebar:
     toc_depth: 3
+  
+sphinx:
+  config:
+    nb_execution_timeout: 120
