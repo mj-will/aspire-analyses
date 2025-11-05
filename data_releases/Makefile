@@ -94,6 +94,13 @@ symlink_to_analysis_dirs:
 	@echo "Creating symlinks to data release directories in analysis directories"
 	ln -s $(abspath $(FIRST_PAPER_DATA_RELEASE_DIR)/core/pp_test_results) $(PP_TEST_CACHE_DIR)
 
+.PHONY: download_first_paper_data_release_core
+download_first_paper_data_release_core:
+	@echo "Downloading first paper core results data release from Zenodo DOI $(FIRST_PAPER_ZENODO_DOI)"
+	mkdir -p $(FIRST_PAPER_DATA_RELEASE_DIR)/core_results
+	zenodo_get $(FIRST_PAPER_ZENODO_DOI) -g "core_results.zip" -o $(FIRST_PAPER_DATA_RELEASE_DIR)/
+	cd $(FIRST_PAPER_DATA_RELEASE_DIR) && unzip core_results.zip -d ./core_results/
+
 .PHONY: clean
 clean:
 	rm -rf $(FIRST_PAPER_DATA_RELEASE_DIR)
