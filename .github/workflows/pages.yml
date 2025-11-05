@@ -72,8 +72,7 @@ jobs:
         run: |
           conda activate aspire
           cd data_releases
-        # Skip for testing
-        #   make download_core
+          make download_first_paper_data_release_core
         shell: bash -l {0}
       - name: Build the book
         run: |
