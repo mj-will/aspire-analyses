@@ -7,7 +7,7 @@ GWDATA_config := $(GWDATA_DIR)/config.mk
 PP_TEST_DIR := $(abspath $(MAKEFILE_DIR)/../gw/pp_tests)
 FIRST_PAPER_PP_TEST_DIR := $(PP_TEST_DIR)/$(FIRST_PAPER_PP_TEST_OUTDIR)
 
-ZIP_COMMAND := zip -r -j
+ZIP_COMMAND := zip -r
 
 
 # Include the GW data config to get INJECTION_PARAMS_PATH and FRAME_FILES_PATH
@@ -45,7 +45,7 @@ $(FIRST_PAPER_DATA_RELEASE_DIR)/additional_results:
 	@echo "Making data release for first paper additional results"
 	mkdir -p $@
 	@echo "Linking P-P test results from $(FIRST_PAPER_PP_TEST_DIR)"
-	rm $@/pp_test_results
+	rm -f $@/pp_test_results
 	ln -s $(FIRST_PAPER_PP_TEST_DIR)/final_result $@/pp_test_results
 
 # Zip up the data release
@@ -54,21 +54,21 @@ first_paper_data_release_core_results_zip: $(FIRST_PAPER_DATA_RELEASE_DIR)/core_
 
 $(FIRST_PAPER_DATA_RELEASE_DIR)/core_results.zip : $(FIRST_PAPER_DATA_RELEASE_DIR)/core_results
 	@echo "Zipping data release for first paper"
-	$(ZIP_COMMAND) $@ $(FIRST_PAPER_DATA_RELEASE_DIR)/core_results
+	cd $(FIRST_PAPER_DATA_RELEASE_DIR)/core_results && $(ZIP_COMMAND) $(abspath $@) .
 
 .PHONY: first_paper_data_release_data_zip
 first_paper_data_release_data_zip: $(FIRST_PAPER_DATA_RELEASE_DIR)/data.zip
 
 $(FIRST_PAPER_DATA_RELEASE_DIR)/data.zip : $(FIRST_PAPER_DATA_RELEASE_DIR)/data
 	@echo "Zipping data release for first paper data"
-	$(ZIP_COMMAND) $@ $(FIRST_PAPER_DATA_RELEASE_DIR)/data
+	cd $(FIRST_PAPER_DATA_RELEASE_DIR)/data && $(ZIP_COMMAND) $(abspath $@) .
 
 .PHONY: first_paper_data_release_additional_results_zip
 first_paper_data_release_additional_results_zip: $(FIRST_PAPER_DATA_RELEASE_DIR)/additional_results.zip
 
 $(FIRST_PAPER_DATA_RELEASE_DIR)/additional_results.zip : $(FIRST_PAPER_DATA_RELEASE_DIR)/additional_results
 	@echo "Zipping additional results data release for first paper"
-	$(ZIP_COMMAND) $@ $(FIRST_PAPER_DATA_RELEASE_DIR)/additional_results
+	cd $(FIRST_PAPER_DATA_RELEASE_DIR)/additional_results && $(ZIP_COMMAND) $(abspath $@) .
 
 .PHONY: first_paper_data_release_zip
 first_paper_data_release_zip: first_paper_data_release_core_results_zip first_paper_data_release_data_zip first_paper_data_release_additional_results_zip
