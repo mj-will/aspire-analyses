@@ -60,8 +60,6 @@ def main(args):
     (outdir / "cal").mkdir(parents=True, exist_ok=True)
 
     with h5py.File(filepath, "r") as f:
-        print(f[f"{args.analysis}/priors"].keys())
-        print(f[f"{args.analysis}/priors/analytic/chirp_mass"][()])
         for key, psd in f[f"{args.analysis}/psds"].items():
             np.savetxt(outdir / "psds" /f"{key}-psd.dat", psd)
         for key, cal in f[f"{args.analysis}/calibration_envelope"].items():
