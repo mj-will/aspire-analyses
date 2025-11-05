@@ -26,6 +26,7 @@ dependencies:
   - jaxtyping
   - wadler-lindig
   - minipcn
+  - zenodo_get
   - pip
   - pip:
     - flowjax
