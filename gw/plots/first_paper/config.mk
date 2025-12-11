@@ -1,4 +1,5 @@
 # Configuration file for plotting scripts for first paper
+DATA_RELEASE_PATH=../../../data_releases/first_paper_data_release
 # File containing mapping to result files
 RESULTS_MAPPING=../../../data_releases/results_first_paper.yaml
 # P-P test output directory

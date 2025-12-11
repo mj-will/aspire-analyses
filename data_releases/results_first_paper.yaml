@@ -17,6 +17,12 @@ GW150914-like:
     dynesty: first_paper_data_release/core_results/single_event_analyses/GW150914_like_IMRPhenomXO4a_dynesty_result.hdf5
   IMRPhenomXPHM:
     dynesty: first_paper_data_release/core_results/single_event_analyses/GW150914_like_IMRPhenomXPHM_dynesty_result.hdf5
+GW200129:
+  IMRPhenomXO4a:
+    aspire: first_paper_data_release/core_results/single_event_analyses/GW200129_IMRPhenomXO4a_aspire_result.hdf5
+    dynesty: first_paper_data_release/core_results/single_event_analyses/GW200129_IMRPhenomXO4a_dynesty_result.hdf5
+  IMRPhenomXPHM:
+    dynesty: first_paper_data_release/core_results/single_event_analyses/GW200129_IMRPhenomXPHM_dynesty_result.hdf5
 eccentric:
   TaylorF2:
     dynesty: first_paper_data_release/core_results/single_event_analyses/eccentric_TaylorF2_dynesty_result.hdf5

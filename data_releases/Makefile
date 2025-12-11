@@ -31,6 +31,7 @@ $(FIRST_PAPER_DATA_RELEASE_DIR)/core_results:
 	ln -s $(PP_TEST_CACHE_DIR) $@/pp_test_results
 	rm -rf $@/single_event_analyses
 	python fetch_results_from_yaml.py $(FIRST_PAPER_LOCAL_RESULTS) --outdir $@/single_event_analyses/ --output-yaml results_first_paper.yaml --overwrite --verbose
+	cp $(FIRST_PAPER_ASPIRE_CHECKPOINT) $@/single_event_analyses/GW150914_IMRPhenomXO4a_aspire_checkpoint.h5
 
 # Results data release
 .PHONY: first_paper_data_release_data
