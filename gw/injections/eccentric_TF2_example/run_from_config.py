@@ -19,7 +19,7 @@ import argparse
 import copy
 import bilby
 import numpy as np
-from bilby.core.utils.random import seed
+from bilby.core.utils import random
 from pathlib import Path
 import matplotlib.pyplot as plt
 import os

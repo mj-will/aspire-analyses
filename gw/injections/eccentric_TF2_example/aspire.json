@@ -1,6 +1,6 @@
 {
     "sampler": "aspire",
-    "initial_result_file": "outdir_from_config/dynesty_aligned_result.hdf5",
+    "initial_result_file": "outdir_from_config_reruns_seed/dynesty_aligned_result.hdf5",
     "sample_from_prior": [
         "chirp_mass",
         "mass_ratio",
