@@ -6,8 +6,9 @@ dependencies:
   - numpy
   - scipy
   - array-api-compat
-  - bilby>=2.6.0
-  - bilby_pipe>=1.6.0
+  - array-api-extra
+  - bilby==2.6.0
+  - bilby_pipe==1.6.0
   - dynesty
   - emcee
   - pesummary
