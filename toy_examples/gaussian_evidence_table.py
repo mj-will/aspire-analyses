@@ -1,4 +1,5 @@
 """Convert JSON files with evidence estimates into a LaTeX table."""
+
 from pathlib import Path
 import json
 
@@ -21,9 +22,16 @@ def fmt_ratio(n, d, ndp=2):
     return f"{n / d:.{ndp}f}"
 
 
+def delta_logz(logz, analytic):
+    if logz in (None, "") or analytic in (None, ""):
+        return None
+    return logz - analytic
+
+
 def highlight(logz, sigma, analytic, ndp=2):
-    """Bold logZ if within 3σ of analytic."""
-    value = fmt(logz, ndp=ndp)
+    """Bold delta logZ if the estimate is within 3σ of analytic."""
+    delta = delta_logz(logz, analytic)
+    value = fmt(delta, ndp=ndp)
     if sigma in (None, ""):
         return value
     if abs(logz - analytic) <= (3 * sigma):
@@ -44,7 +52,7 @@ def ptmcmc_block(label, keys, evidence_results, analytic_value):
         (
             label,
             fmt_int(n_samples),
-            fmt_ratio(n_evals, n_samples),
+            fmt_int(n_evals),
             "Thermodynamic Integration",
             highlight(ti_logz, ti_err, analytic_value),
             f"{fmt(ti_err)} ({fmt(ti_coarse_err)})",
@@ -62,10 +70,7 @@ def ptmcmc_block(label, keys, evidence_results, analytic_value):
 
 def main():
     json_file = (
-        Path("outdir")
-        / "gaussian_comparison_fixed"
-        / "15d"
-        / "evidence_results.json"
+        Path("outdir") / "gaussian_comparison_fixed" / "15d" / "evidence_results.json"
     )
 
     output = Path("evidence_tables")
@@ -77,23 +82,17 @@ def main():
     analytic_value = evidence_results["log_z"]
 
     # --- Rows in correct column order ---
-    analytic_row = (
-        "Analytic",
-        "",
-        "",
-        "",
-        fmt(analytic_value),
-        "",
-    )
-
     smc_samples = evidence_results["smc_n_samples"]
-    smc_evals = evidence_results["smc_likelihood_evals"]
+    smc_evals_total = evidence_results["smc_likelihood_evals"]
+    smc_n_steps = 50
+    smc_n_final_samples = 10_000
+    smc_evals = smc_evals_total - int(smc_n_steps * smc_n_final_samples)
     smc_logz, smc_err = evidence_results["smc_log_z"]
 
     smc_row = (
         "ASPIRE SMC",
         fmt_int(smc_samples),
-        fmt_ratio(smc_evals, smc_samples),
+        f"{fmt_int(smc_evals)} / {fmt_int(smc_evals_total)}",
         r"\Cref{eq:smc:Z_estimator}",
         highlight(smc_logz, smc_err, analytic_value),
         fmt(smc_err),
@@ -135,18 +134,14 @@ def main():
 
     ptmcmc_rows = []
     for label, keys in ptmcmc_methods:
-        ptmcmc_rows.extend(
-            ptmcmc_block(label, keys, evidence_results, analytic_value)
-        )
+        ptmcmc_rows.extend(ptmcmc_block(label, keys, evidence_results, analytic_value))
 
     # --- LaTeX (column order matches exactly) ---
     latex_lines = [
         r"\begin{tabular}{p{2.5cm} C{2cm} C{2.5cm} C{2.5cm} c c}",
         r"\toprule",
-        r"Method & Posterior samples & Likelihood evals. per sample & Estimator & Log Evidence & Uncertainty \\",
+        r"Method & Posterior samples & Likelihood evaluations & Estimator & $\log Z - \log Z_{\mathrm{analytic}}$ & Uncertainty \\",
         r"\midrule",
-        rf"{analytic_row[0]} & {analytic_row[1]} & {analytic_row[2]} & {analytic_row[3]} & {analytic_row[4]} & {analytic_row[5]} \\",
-        "\midrule",
         rf"{smc_row[0]} & {smc_row[1]} & {smc_row[2]} & {smc_row[3]} & {smc_row[4]} & {smc_row[5]} \\",
     ]
 
@@ -156,12 +151,8 @@ def main():
 
         latex_lines.append(r"\midrule")
         latex_lines.append(rf"\multirow{{2}}{{*}}{{{method}}}")
-        latex_lines.append(
-            rf" & {ns1} & {cps1} & {est1} & {logz1} & {err1} \\"
-        )
-        latex_lines.append(
-            rf" & {ns2} & {cps2} & {est2} & {logz2} & {err2} \\"
-        )
+        latex_lines.append(rf" & {ns1} & {cps1} & {est1} & {logz1} & {err1} \\")
+        latex_lines.append(rf" & {ns2} & {cps2} & {est2} & {logz2} & {err2} \\")
 
     latex_lines.extend(
         [
