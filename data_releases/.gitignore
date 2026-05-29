@@ -1,4 +1,5 @@
 *.zip
 *_data_release/
+*_data_release_old/
 *_code_release/
 *_results_release/

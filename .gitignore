@@ -178,3 +178,10 @@ outdir*/
 *lookup.npz
 figures/
 logs/
+*.png
+*.csv
+*.pkl
+*.pkl.old
+*.tex
+*.pt
+*.pt.old
